@@ -1,0 +1,1 @@
+FLASK_APP=HW15_PLOTLY/app.py flask run

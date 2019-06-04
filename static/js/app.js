@@ -4,17 +4,18 @@ console.log("buildMetadata");
 
   // Use `d3.json` to fetch the metadata for a sample
     // Use d3 to select the panel with id of `#sample-metadata`
+     //adding metadata to the end of the URL from python app.py for meta data
   d3.json("http://127.0.0.1:5000/metadata/" + sample).then(function (metabacteria) {
     console.log(metabacteria);
     var panel = d3.select("#sample-metadata");
-    panel.html(""); // Use `.html("") to clear any existing metadata
+    panel.html(""); // Using `.html("") to clear any existing metadata
 
     // Use `Object.entries` to add each key and value pair to the panel
     // Hint: Inside the loop, you will need to use d3 to append new
     // tags for each key-value in the metadata. 
   for (let [key,value] of Object.entries(metabacteria)) {
       panel.append("text").text(key + ": " + value+"\n");
-
+      //appending new tags for each key-value
     }
   });
 
@@ -23,9 +24,11 @@ console.log("buildMetadata");
 function buildCharts(sample) {
  console.log("buildCharts");
   // @TODO: Use `d3.json` to fetch the sample data for the plots
+  //adding samples to the end of the URL from python app.py for sample data
  function buildPlot1() {
     d3.json("http://127.0.0.1:5000/samples/" + sample).then(function (bacteria) {
       console.log(bacteria);
+      //slice to ONLY take the top 10
           var samples = bacteria.sample_values.slice(0, 10);
           var otu_ids = bacteria.otu_ids.slice(0, 10);
           var otu_labels = bacteria.otu_labels.slice(0, 10);
@@ -52,11 +55,12 @@ function buildCharts(sample) {
         function buildPlot2() {
            d3.json("http://127.0.0.1:5000/samples/" + sample).then(function (newbacteria) {
              console.log(newbacteria);
+              //slice to ONLY take the top 10
                  var samples = newbacteria.sample_values.slice(0, 10);
-       
                  var otu_ids = newbacteria.otu_ids.slice(0, 10);
                  var otu_labels = newbacteria.otu_labels.slice(0, 10);
                  console.log(otu_labels);
+                 //building the bubble plot
                  var trace = {
                    x: otu_ids,
                    y: newbacteria.sample_values,
@@ -68,6 +72,7 @@ function buildCharts(sample) {
 
                    }
                  };
+                 //layout for bubble plot
                  var data = [trace];
                 var layout = {
                   title: "Bacteria Bubble Disribution",
@@ -79,6 +84,7 @@ function buildCharts(sample) {
                 Plotly.newPlot("bubble", data, layout);
                });
              }
+             //return both plots (Plot1 & Plot2)
              buildPlot1();
              buildPlot2();
      
